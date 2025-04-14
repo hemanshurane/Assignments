@@ -10,29 +10,51 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AsyncPipe } from '@angular/common';
 import { AppConfigService } from './services/appConfig.service';
 import { AppHttpInterceptor } from './interceptors/http.interceptor';
+import { distinctUntilChanged, interval, switchMap } from 'rxjs';
+import { TableModule } from 'primeng/table';
+import { Dialog } from 'primeng/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
 
 export function initializeApp(appConfigSvc: AppConfigService): () => Promise<void> {
   return () => new Promise((resolve, reject) => {
-    appConfigSvc.loadAppConfig().subscribe((config)=> {
+    interval(10000).pipe(
+      switchMap(() => appConfigSvc.loadAppConfig()),
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+    ).subscribe((config) =>  {
       appConfigSvc.setConfig(config);
       resolve();
     },(error) => {
       //errorHandling
       reject(error);
     })
+    // appConfigSvc.loadAppConfig().subscribe((config)=> {
+    //   appConfigSvc.setConfig(config);
+    //   resolve();
+    // },(error) => {
+    //   //errorHandling
+    //   reject(error);
+    // })
   })
 }
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ButtonModule,
-    HttpClientModule
+    HttpClientModule,
+    TableModule,
+    Dialog,
+    BrowserAnimationsModule,
+    DynamicDialogModule
   ],
+
   providers: [ providePrimeNG({
     theme: {
         preset: Aura
