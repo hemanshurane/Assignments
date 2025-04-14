@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { AppService } from './services/app.service';
+import { AsyncPipe } from '@angular/common';
+import { config } from 'rxjs';
+import { AppConfigService } from './services/appConfig.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +12,11 @@ import { AppService } from './services/app.service';
 })
 export class AppComponent {
   title = 'assignment_1';
-  constructor( private appService: AppService){
-    this.appService.getAppConfig().subscribe((data) => {
-      console.log('Data====', data);
+  constructor( private appService: AppService, private appConfigSvc: AppConfigService){}
+
+  ngOnInit() {
+    this.appService.getDevices(this.appConfigSvc.getEndPoint('devices')).subscribe((data) => {
+      console.log("Devices Data---->", data);
     })
   }
-}
+}  
