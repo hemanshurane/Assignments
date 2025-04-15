@@ -16,6 +16,11 @@ import { Dialog } from 'primeng/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { ProgressSpinner, ProgressSpinnerModule } from 'primeng/progressspinner';
+import { BadgeModule } from 'primeng/badge';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 export function initializeApp(appConfigSvc: AppConfigService): () => Promise<void> {
   return () => new Promise((resolve, reject) => {
@@ -52,7 +57,11 @@ export function initializeApp(appConfigSvc: AppConfigService): () => Promise<voi
     TableModule,
     Dialog,
     BrowserAnimationsModule,
-    DynamicDialogModule
+    DynamicDialogModule,
+    ToastModule,
+    ProgressSpinnerModule,
+    BadgeModule,
+    OverlayBadgeModule
   ],
 
   providers: [ providePrimeNG({
@@ -60,7 +69,7 @@ export function initializeApp(appConfigSvc: AppConfigService): () => Promise<voi
         preset: Aura
     }
 }), AppConfigService, {provide: APP_INITIALIZER, useFactory: initializeApp, deps:[AppConfigService],multi: true},
-{provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true}],
+{provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true}, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -40,8 +40,10 @@ export class AppService {
     })
     
   }
-  public getOrderDetails(orderId: number): Observable<any> {
-    return this.http.get(`${API_END_POINTS.BASE_URL}${this.applicationConfig && this.applicationConfig.endpoints?.order}`);
+  public getOrderDetails(endpoint: string,orderId: number): Observable<any> {
+    let replaceEndPoint = endpoint.replace('{orderId}', orderId.toString());
+    const url = `${API_END_POINTS.BASE_URL}${replaceEndPoint}`;
+    return this.http.get(url);
   }
 
   getDeviceDetails(url: string){

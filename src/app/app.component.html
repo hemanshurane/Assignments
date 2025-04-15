@@ -1,3 +1,7 @@
+<p-toast></p-toast>
+<div *ngIf="loading" class="spinner-container">
+    <p-progressSpinner></p-progressSpinner>
+</div>
 <p [style.background-color]="config.environmentColour"><b>Assignment SFS Group</b></p>
 <p [style.background-color]="config.environmentColour"><b>Your application running on {{config.environmentName}} environment</b></p>
 <p-table
@@ -17,9 +21,24 @@
             </tr>
         </ng-template>
 </p-table>
-<p-dialog header="Header" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [closable]="true" (onHide)="onDialogClose()">
+<p-dialog header="Data visualisation" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [closable]="true" (onHide)="onDialogClose()">
+    <div *ngIf="loading" class="spinner-container">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
     <div>Device ID: {{deviceID}}</div>
-    <div>Device Status: {{deviceStatus}}</div>
+    <div>Device Status: <span><b>{{deviceStatus | uppercase}}  </b></span>
+        <span>
+            <p-badge *ngIf="deviceStatus === 'running'" severity="success" />
+            <p-badge *ngIf="deviceStatus === 'stopped'" severity="danger" />
+            <p-badge *ngIf="deviceStatus === 'maintenance'" severity="warn" />
+        </span>
+    </div> 
+    <div>=======================</div>
+    <div><b>Order Details</b></div>
+    <div>Order ID: {{orderID}}</div>
+    <div>Production Target: {{productionTarget}} </div>
+    <div>Production Done: <span [style.background-color]="'yellow'">{{productionState}}</span></div>
+    <div class=".linechart"></div>
 </p-dialog>
 
 
